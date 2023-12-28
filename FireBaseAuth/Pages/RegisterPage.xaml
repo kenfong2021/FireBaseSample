@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FireBaseAuth.Pages.RegisterPage"
+             xmlns:models="clr-namespace:FireBaseAuth.Models"
+             xmlns:viewModels="clr-namespace:FireBaseAuth.ViewModels"
+             x:DataType="viewModels:AuthViewModel"
+             Title="RegisterPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Register"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Entry Placeholder="Email" Text="{Binding User.email}"/>
+        <Entry Placeholder="Password" Text="{Binding User.password}" IsPassword="true" />
+        <!--<Entry Placeholder="Confirm" IsPassword="true" />-->
+        <Button Text="Register Account" Command="{Binding RegisterUserWithEmailAndPasswordCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

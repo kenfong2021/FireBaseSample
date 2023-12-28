@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:FireBaseAuth.Models"
+             xmlns:viewModels="clr-namespace:FireBaseAuth.ViewModels"
+             x:DataType="viewModels:AuthViewModel"
+             x:Class="FireBaseAuth.Pages.AuthPage"
+             Title="AuthPage">
+    <VerticalStackLayout>
+        <Entry Placeholder="Email" Text="{Binding User.email}"/>
+        <Entry Placeholder="Password" Text="{Binding User.password}" IsPassword="true" />
+
+        <Button Text="Login" Command="{Binding LoginUserWithEmailAndPasswordCommand}" />
+
+        <HorizontalStackLayout>
+            <Label 
+                Text="No Account? click here"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" >
+
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="RegisterRoute"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>
