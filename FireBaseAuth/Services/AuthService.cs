@@ -10,7 +10,7 @@ namespace FireBaseAuth.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly String webApikey = "AIzaSyDevmg5Np2DwyhBNM8OgH0A9-uQqBSLtjM"; // Type your web api key
+        private readonly String webApikey = ""; // Type your web api key
         private User _user;
         public bool isLogin = false;
 
