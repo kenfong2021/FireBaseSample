@@ -1,4 +1,4 @@
-﻿using FireBaseAuth.Model;
+﻿using FireBaseAuth.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

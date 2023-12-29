@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
-using FireBaseAuth.Model;
+using FireBaseAuth.Models;
 using FireBaseAuth.Pages;
 using FireBaseAuth.Services;
 using System;
@@ -18,33 +18,40 @@ namespace FireBaseAuth.ViewModels
         [ObservableProperty]
         private UserModel _user = new UserModel();
         private readonly IAuthService _authService;
+        [ObservableProperty]
         private bool _isLogin = false;
+        [ObservableProperty]
+        private string _welcomeMsg = "";
+         
         public AuthViewModel(IAuthService authService)
         {
             _authService = authService;
         }
-
+         
         [RelayCommand]
         public async Task GetUser()
         {
-            if (_isLogin)
+            if (IsLogin)
             {
                 User = _authService.GetUser();
+                return;
             }
             await Shell.Current.DisplayAlert("Please Login", "Login", "Ok");
         }
 
         [RelayCommand]
-        public async Task IsLogin()
+        public async Task IsUserLogin()
         {
-            _isLogin = await _authService.IsLogin();
+            IsLogin = await _authService.IsLogin();
+            await GetUser();
+            if (IsLogin) WelcomeMsg = $"Welcome {User.username}!";
         }
 
         [RelayCommand]
         public async Task LogoutUser()
         {
             await _authService.LogoutWithEmail();
-            _isLogin = await _authService.IsLogin();
+            IsLogin = await _authService.IsLogin();
             await Shell.Current.DisplayAlert("Status: Logout Success", "Logout Success", "Ok");
         }
 
@@ -59,6 +66,7 @@ namespace FireBaseAuth.ViewModels
             if (result)
             {
                 await Shell.Current.DisplayAlert("Status: Login Success", "Login Success", "Ok");
+                await IsUserLogin();
             }
             else
             {
@@ -73,6 +81,7 @@ namespace FireBaseAuth.ViewModels
             {
                 email = User.email,
                 password = User.password,
+                username = User.username,
             });
             if (result)
             {

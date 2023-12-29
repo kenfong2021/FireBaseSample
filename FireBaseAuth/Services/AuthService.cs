@@ -1,5 +1,5 @@
 ﻿using Firebase.Auth;
-using FireBaseAuth.Model;
+using FireBaseAuth.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +36,11 @@ namespace FireBaseAuth.Services
             {
                 var authProvider = new FirebaseAuthProvider(new FirebaseConfig(webApikey));
                 var auth = await authProvider.SignInWithEmailAndPasswordAsync(user.email, user.password);
-
+                _user = auth.User;
+                isLogin = true;
                 return true;
             }
-            catch  
+            catch (Exception ex)
             {
                 return false;
             }
@@ -57,8 +58,8 @@ namespace FireBaseAuth.Services
             try
             {
                 var authProvider = new FirebaseAuthProvider(new FirebaseConfig(webApikey));
-                var auth = await authProvider.CreateUserWithEmailAndPasswordAsync(user.email, user.password);
-
+                var auth = await authProvider.CreateUserWithEmailAndPasswordAsync(user.email, user.password, user.username);
+ 
                 return true;
             }
             catch

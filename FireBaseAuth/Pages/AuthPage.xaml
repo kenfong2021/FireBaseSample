@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage x:Class="FireBaseAuth.Pages.AuthPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:FireBaseAuth.Models"
              xmlns:viewModels="clr-namespace:FireBaseAuth.ViewModels"
-             x:DataType="viewModels:AuthViewModel"
-             x:Class="FireBaseAuth.Pages.AuthPage"
+             x:DataType="viewModels:AuthViewModel"            
              Title="AuthPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <VerticalStackLayout>
-        <Entry Placeholder="Email" Text="{Binding User.email}"/>
-        <Entry Placeholder="Password" Text="{Binding User.password}" IsPassword="true" />
-
-        <Button Text="Login" Command="{Binding LoginUserWithEmailAndPasswordCommand}" />
-
-        <HorizontalStackLayout>
-            <Label 
-                Text="No Account? click here"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" >
-
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="RegisterRoute"/>
-                </Label.GestureRecognizers>
+        <Entry Placeholder="Email" Text="{Binding User.email}" IsVisible="{Binding IsLogin, Converter={StaticResource InvertedBoolConverter}}"/>
+        <Entry Placeholder="Password" Text="{Binding User.password}" IsPassword="{Binding Source={x:Reference showPassword}, Path=IsChecked, Converter={StaticResource InvertedBoolConverter} }" IsVisible="{Binding IsLogin, Converter={StaticResource InvertedBoolConverter}}"/>
+        <HorizontalStackLayout IsVisible="{Binding IsLogin, Converter={StaticResource InvertedBoolConverter}}">
+            <CheckBox x:Name="showPassword"></CheckBox>
+            <Label Text="Show Password" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+        <Button Text="Login" Command="{Binding LoginUserWithEmailAndPasswordCommand}" IsVisible="{Binding IsLogin, Converter={StaticResource InvertedBoolConverter}}"/>
+        <HorizontalStackLayout IsVisible="{Binding IsLogin , Converter={StaticResource InvertedBoolConverter}}">
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="No Account? Click Here"
+                            TextColor="Blue"
+                            TextDecorations="Underline">
+                            <Span.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="RegisterRoute"/>
+                            </Span.GestureRecognizers>
+                        </Span>
+                    </FormattedString>
+                </Label.FormattedText>
             </Label>
         </HorizontalStackLayout>
+        <Label Text="{Binding Path=WelcomeMsg}" 
+            IsVisible="{Binding Path=IsLogin}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" >
+        </Label>
+        <Button Text="LogOut" Command="{Binding LogoutUserCommand}" IsVisible="{Binding Path=IsLogin}"/>
     </VerticalStackLayout>
 </ContentPage>

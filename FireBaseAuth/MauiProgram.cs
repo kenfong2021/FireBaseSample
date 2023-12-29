@@ -1,4 +1,5 @@
-﻿using DevExpress.Maui;
+﻿using CommunityToolkit.Maui;
+using DevExpress.Maui;
 using DevExpress.Maui.Core;
 using FireBaseAuth.Pages;
 using FireBaseAuth.Services;
@@ -19,6 +20,7 @@ namespace FireBaseAuth
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseDevExpress(useLocalization: true)
                 .ConfigureFonts(fonts =>
                 {
