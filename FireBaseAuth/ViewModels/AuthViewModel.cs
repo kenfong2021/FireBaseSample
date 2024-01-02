@@ -56,6 +56,13 @@ namespace FireBaseAuth.ViewModels
         }
 
         [RelayCommand]
+        public async Task SendPasswordResetEmail()
+        {
+            await _authService.SendPasswordResetEmail(User.email);
+            await Shell.Current.DisplayAlert("Status: Reset Password Email Is Sent", "Login Success", "Ok");
+        }
+
+        [RelayCommand]
         public async Task LoginUserWithEmailAndPassword()
         {
             var result = await _authService.LoginUserWithEmail(new UserModel
@@ -67,6 +74,7 @@ namespace FireBaseAuth.ViewModels
             {
                 await Shell.Current.DisplayAlert("Status: Login Success", "Login Success", "Ok");
                 await IsUserLogin();
+                await AppShell.Current.GoToAsync(nameof(UserPage));
             }
             else
             {

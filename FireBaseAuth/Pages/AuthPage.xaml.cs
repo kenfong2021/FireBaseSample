@@ -14,4 +14,9 @@ public partial class AuthPage : ContentPage
     {
         await AppShell.Current.GoToAsync(nameof(RegisterPage));
     }
+
+    private async void PasswordResetRoute(object sender, TappedEventArgs e)
+    {
+        await AppShell.Current.GoToAsync(nameof(PasswordResetPage));
+    }
 }

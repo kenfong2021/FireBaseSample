@@ -10,7 +10,7 @@ namespace FireBaseAuth.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly String webApikey = ""; // Type your web api key
+        private readonly String webApikey = "AIzaSyDevmg5Np2DwyhBNM8OgH0A9-uQqBSLtjM"; // Type your web api key
         private User _user;
         public bool isLogin = false;
 
@@ -35,7 +35,7 @@ namespace FireBaseAuth.Services
             try
             {
                 var authProvider = new FirebaseAuthProvider(new FirebaseConfig(webApikey));
-                var auth = await authProvider.SignInWithEmailAndPasswordAsync(user.email, user.password);
+                var auth = await authProvider.SignInWithEmailAndPasswordAsync(user.email.Trim(), user.password.Trim());
                 _user = auth.User;
                 isLogin = true;
                 return true;
@@ -53,12 +53,18 @@ namespace FireBaseAuth.Services
             isLogin = false;
         }
 
+        public async Task SendPasswordResetEmail(string email)
+        {
+            var authProvider = new FirebaseAuthProvider(new FirebaseConfig(webApikey));
+            await authProvider.SendPasswordResetEmailAsync(email.Trim());
+        }
+
         public async Task<bool> RegisterUserWithEmail(UserModel user)
         {
             try
             {
                 var authProvider = new FirebaseAuthProvider(new FirebaseConfig(webApikey));
-                var auth = await authProvider.CreateUserWithEmailAndPasswordAsync(user.email, user.password, user.username);
+                var auth = await authProvider.CreateUserWithEmailAndPasswordAsync(user.email.Trim(), user.password.Trim(), user.username.Trim());
  
                 return true;
             }

@@ -12,6 +12,7 @@ namespace FireBaseAuth.Services
         Task<bool> RegisterUserWithEmail(UserModel user);
         Task<bool> LoginUserWithEmail(UserModel user);
         Task LogoutWithEmail();
+        Task SendPasswordResetEmail(string email);
         UserModel GetUser();
         Task<bool> IsLogin();
     }

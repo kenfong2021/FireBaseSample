@@ -21,7 +21,7 @@
             <Label Text="Show Password" VerticalOptions="Center" />
         </HorizontalStackLayout>
         <Button Text="Login" Command="{Binding LoginUserWithEmailAndPasswordCommand}" IsVisible="{Binding IsLogin, Converter={StaticResource InvertedBoolConverter}}"/>
-        <HorizontalStackLayout IsVisible="{Binding IsLogin , Converter={StaticResource InvertedBoolConverter}}">
+        <VerticalStackLayout IsVisible="{Binding IsLogin , Converter={StaticResource InvertedBoolConverter}}">
             <Label>
                 <Label.FormattedText>
                     <FormattedString>
@@ -35,7 +35,20 @@
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
-        </HorizontalStackLayout>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Forget Password?"
+                  TextColor="Blue"
+                  TextDecorations="Underline">
+                            <Span.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PasswordResetRoute"/>
+                            </Span.GestureRecognizers>
+                        </Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </VerticalStackLayout>
         <Label Text="{Binding Path=WelcomeMsg}" 
             IsVisible="{Binding Path=IsLogin}"
             VerticalOptions="Center" 

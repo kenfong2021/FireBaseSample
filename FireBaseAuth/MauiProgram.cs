@@ -35,6 +35,8 @@ namespace FireBaseAuth
             // Add Views
             builder.Services.AddSingleton<RegisterPage>();
             builder.Services.AddSingleton<AuthPage>();
+            builder.Services.AddSingleton<PasswordResetPage>();
+            builder.Services.AddSingleton<UserPage>();
             // Add ViewModel
             builder.Services.AddSingleton<AuthViewModel>();
             return builder.Build();
