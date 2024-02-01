@@ -1,14 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
+using Firebase.Database;
+using Firebase.Database.Query;
 using FireBaseAuth.Models;
 using FireBaseAuth.Pages;
 using FireBaseAuth.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+ 
 
 namespace FireBaseAuth.ViewModels
 {
@@ -22,12 +26,77 @@ namespace FireBaseAuth.ViewModels
         private bool _isLogin = false;
         [ObservableProperty]
         private string _welcomeMsg = "";
-         
+        [ObservableProperty]
+        private NoteModel _selectedNote;
+        [ObservableProperty]
+        private string _inputMode = "Save";
+        public ObservableCollection<NoteModel> MyNotes { get; set; } = new ObservableCollection<NoteModel>();
+        private FirebaseClient firebaseClient;
+ 
         public AuthViewModel(IAuthService authService)
         {
             _authService = authService;
+            
         }
-         
+
+        public void UpdateNote(NoteModel note)
+        {
+            SelectedNote = note;
+            InputMode = "Update";
+        }
+
+        public void FillList()
+        {
+            var collection = firebaseClient
+                .Child("users")
+                .Child(_user.Id)
+                .AsObservable<NoteModel>()
+                .Subscribe((item) =>
+                {
+                    if (item.Object != null)
+                    {
+                        //var note = MyNotes.FirstOrDefault(f => f.Key == item.Key);
+                        //note.Key = item.Key;
+                        var note = MyNotes.FirstOrDefault(f => f.Key == item.Key);
+                        if (note != null)
+                        {
+                            //item.Object.Key = note.Key;
+                            MyNotes.Remove(note);                         
+                        }
+                        item.Object.Key = item.Key;
+                        MyNotes.Add(item.Object);
+                    }
+                });
+        }
+ 
+        [RelayCommand]
+        public async Task InsertRemark(string remark)
+        {
+            if (IsLogin)
+            {
+                if (SelectedNote != null)
+                {
+                    SelectedNote.Remark = remark;
+                    await firebaseClient
+                        .Child("users")
+                        .Child(_user.Id)
+                        .Child(SelectedNote.Key)
+                        .PutAsync(SelectedNote);
+                }
+                else
+                {
+                    await firebaseClient.Child("users").Child(_user.Id).PostAsync(new NoteModel
+                    {
+                        Remark = remark,
+                    });
+                }
+
+                InputMode = "Save";
+                return;
+            }
+             
+        }
+
         [RelayCommand]
         public async Task GetUser()
         {
@@ -44,7 +113,13 @@ namespace FireBaseAuth.ViewModels
         {
             IsLogin = await _authService.IsLogin();
             await GetUser();
-            if (IsLogin) WelcomeMsg = $"Welcome {User.username}!";
+            if (IsLogin)
+            {
+                WelcomeMsg = $"Welcome {User.username}!";
+                var opt = new FirebaseOptions { AuthTokenAsyncFactory = () => Task.FromResult(User.token) };
+
+                firebaseClient = new FirebaseClient("https://maui-fuelprice-default-rtdb.firebaseio.com/", opt);
+            } 
         }
 
         [RelayCommand]
@@ -74,6 +149,7 @@ namespace FireBaseAuth.ViewModels
             {
                 await Shell.Current.DisplayAlert("Status: Login Success", "Login Success", "Ok");
                 await IsUserLogin();
+                FillList();
                 await AppShell.Current.GoToAsync(nameof(UserPage));
             }
             else

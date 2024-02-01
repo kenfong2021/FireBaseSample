@@ -32,11 +32,13 @@ namespace FireBaseAuth
 
             // Add Service
             builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddSingleton<IPhoneAuthenticationService, PhoneAuthenticationService>();
             // Add Views
             builder.Services.AddSingleton<RegisterPage>();
             builder.Services.AddSingleton<AuthPage>();
             builder.Services.AddSingleton<PasswordResetPage>();
             builder.Services.AddSingleton<UserPage>();
+            builder.Services.AddSingleton<MainPage>();
             // Add ViewModel
             builder.Services.AddSingleton<AuthViewModel>();
             return builder.Build();

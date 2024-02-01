@@ -1,18 +1,22 @@
 ﻿using FireBaseAuth.Pages;
+using FireBaseAuth.Services;
 
 namespace FireBaseAuth
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        private readonly IPhoneAuthenticationService _phoneAuthenticationService;
+        public MainPage(IPhoneAuthenticationService phoneAuthenticationService)
         {
             InitializeComponent();
+            _phoneAuthenticationService = phoneAuthenticationService;
         }
 
         async void OnOpenWebButtonClicked(System.Object sender, System.EventArgs e)
         {
             await Browser.OpenAsync("https://www.devexpress.com/maui/");
         }
+
 
         async void UserRoute(object sender, EventArgs e)
         {
