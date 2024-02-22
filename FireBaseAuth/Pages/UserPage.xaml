@@ -35,7 +35,7 @@
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" >
             </Label>
-            <Entry x:Name="TitleEntry" Placeholder="Something to do..." />
+            <Entry x:Name="TitleEntry" Text="{Binding Value}" Placeholder="Something to do..." />
             <CollectionView ItemsSource="{Binding MyNotes}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -59,7 +59,6 @@
                 <Button x:Name="btnSubmit"
                         Text="{Binding InputMode}"
                         Command="{Binding InsertRemarkCommand}"
-                        CommandParameter="{Binding Source={x:Reference TitleEntry}, Path=Text}"
                         HorizontalOptions="Center" />
             </Border>
             <Border Stroke="#C49B33"

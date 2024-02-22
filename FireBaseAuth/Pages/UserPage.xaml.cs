@@ -28,7 +28,7 @@ public partial class UserPage : ContentPage
         var source = (NoteModel)label.BindingContext;
         var vm = (AuthViewModel)this.BindingContext;
         vm.UpdateNote(source);
-        TitleEntry.Text = label.Text;
+        //TitleEntry.Text = label.Text;
     }
 
 }

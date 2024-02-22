@@ -30,6 +30,8 @@ namespace FireBaseAuth.ViewModels
         private NoteModel _selectedNote;
         [ObservableProperty]
         private string _inputMode = "Save";
+        [ObservableProperty]
+        private string _value = string.Empty;
         public ObservableCollection<NoteModel> MyNotes { get; set; } = new ObservableCollection<NoteModel>();
         private FirebaseClient firebaseClient;
  
@@ -43,13 +45,14 @@ namespace FireBaseAuth.ViewModels
         {
             SelectedNote = note;
             InputMode = "Update";
+            Value = note.Remark;
         }
 
         public void FillList()
         {
             var collection = firebaseClient
                 .Child("users")
-                .Child(_user.Id)
+                .Child(User.Id)
                 .AsObservable<NoteModel>()
                 .Subscribe((item) =>
                 {
@@ -76,21 +79,22 @@ namespace FireBaseAuth.ViewModels
             {
                 if (SelectedNote != null)
                 {
-                    SelectedNote.Remark = remark;
+                    SelectedNote.Remark = Value;
                     await firebaseClient
                         .Child("users")
-                        .Child(_user.Id)
+                        .Child(User.Id)
                         .Child(SelectedNote.Key)
                         .PutAsync(SelectedNote);
                 }
                 else
                 {
-                    await firebaseClient.Child("users").Child(_user.Id).PostAsync(new NoteModel
+                    await firebaseClient.Child("users").Child(User.Id).PostAsync(new NoteModel
                     {
-                        Remark = remark,
+                        Remark = Value,
                     });
                 }
 
+                SelectedNote = null;
                 InputMode = "Save";
                 return;
             }
